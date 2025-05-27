@@ -10,7 +10,7 @@ public class TableData {
     public TableData() {
     }
 
-    public TableData(String firstName, String lastName, String email, String due, String website) {
+    public TableData(String lastName, String firstName, String email, String due, String website) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;

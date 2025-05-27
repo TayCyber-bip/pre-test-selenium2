@@ -1,20 +1,20 @@
 package PageObjects;
 
 import Commnon.Constant;
+import DataTypes.PageName;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public class GeneralPage {
-    // private String pageName;
-//    private By getDynamicPageXpath(){
-//
-//    }
-//    protected WebElement getPage(PageUrls page){
-//        this.pageName = page.getUrl();
-//        return Constant.webDriver.findElement(getDynamicPageXpath());
-//    }
+    private By getDynamicPageXpath(String pageName){
+        String xpath = String.format("//a[text()='%s']", pageName);
+        return By.xpath(xpath);
+    }
+    protected WebElement getPage(PageName page){
+        return Constant.webDriver.findElement(getDynamicPageXpath(page.getName()));
+    }
 
-//    public void goToPage(String page){
-//        this.getPage(page).click();
-//    }
+    public void goToPage(PageName page){
+        this.getPage(page).click();
+    }
 }
