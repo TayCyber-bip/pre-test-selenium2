@@ -1,11 +1,13 @@
 package TestCases;
 
 import Commnon.Constant;
+import Commnon.util.ExtentManager;
 import DataObjects.TableData;
 import DataTypes.PageName;
 import DataTypes.SortableDataTableHeader;
 import PageObjects.HomePage;
 import PageObjects.SortableTablePage;
+import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.ITestResult;
@@ -23,6 +25,7 @@ public class SortableDataTableTest {
     SortableTablePage sortableTablePage;
     HomePage homePage;
     SoftAssert softAssert;
+    ExtentTest extentTest;
     @BeforeMethod
     public void beforeMethod(){
         System.out.println("Pre-condition");
@@ -44,21 +47,22 @@ public class SortableDataTableTest {
     }
     @AfterMethod
     public void afterMethod(ITestResult result) {
-//        if (result.getStatus() == ITestResult.FAILURE) {
-//            extentTest.fail("Test failed: " + result.getThrowable().getMessage());
-//            String screenshotPath = ExtentManager.captureScreenshot(Constant.WEBDRIVER, result.getName());
-//            extentTest.addScreenCaptureFromPath(screenshotPath);
-//        } else if (result.getStatus() == ITestResult.SUCCESS) {
-//            extentTest.pass("Test passed");
-//        } else if (result.getStatus() == ITestResult.SKIP) {
-//            extentTest.skip("Test skipped: " + result.getThrowable().getMessage());
-//        }
-//        ExtentManager.flush();
-//        Constant.webDriver.quit();
+        if (result.getStatus() == ITestResult.FAILURE) {
+            extentTest.fail("Test failed: " + result.getThrowable().getMessage());
+            String screenshotPath = ExtentManager.captureScreenshot(Constant.webDriver, result.getName());
+            extentTest.addScreenCaptureFromPath(screenshotPath);
+        } else if (result.getStatus() == ITestResult.SUCCESS) {
+            extentTest.pass("Test passed");
+        } else if (result.getStatus() == ITestResult.SKIP) {
+            extentTest.skip("Test skipped: " + result.getThrowable().getMessage());
+        }
+        ExtentManager.flush();
+        Constant.webDriver.quit();
     }
 
     @Test(description = "Verify that the first table has correct data in the first row")
     public void TC1(){
+        extentTest = ExtentManager.createTest("Pretest: TC1","Verify that the first table has correct data in the first row");
         homePage.goToPage(PageName.SORTABLE_DATA_TABLE);
         actualFirstRow =  sortableTablePage.getFirstRowData();
         softAssert.assertEquals(actualFirstRow.getLastName(), expectedFirstRow.getLastName(), "Last name mismatch");
@@ -71,6 +75,7 @@ public class SortableDataTableTest {
 
     @Test(description = "Verify the data in the columns is sorted ASC/DESC when click on the header of each column")
     public void TC2(){
+        extentTest = ExtentManager.createTest("Pretest: TC2","Verify the data in the columns is sorted ASC/DESC when click on the header of each column");
         homePage.goToPage(PageName.SORTABLE_DATA_TABLE);
         softAssert.assertTrue(sortableTablePage.isColumnSorted(SortableDataTableHeader.LAST_NAME));
         softAssert.assertTrue(sortableTablePage.isColumnSorted(SortableDataTableHeader.FIRST_NAME));

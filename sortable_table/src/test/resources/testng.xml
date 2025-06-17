@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Sortable Table Test Suite">
+    <test name="Pre Tests">
+        <classes>
+            <class name="TestCases.SortableDataTableTest">
+                <methods>
+                    <include name="TC01"/>
+                    <include name="TC02"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+
+
+</suite>
