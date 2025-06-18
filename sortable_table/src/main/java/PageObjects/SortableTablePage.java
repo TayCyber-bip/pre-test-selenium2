@@ -13,14 +13,8 @@ import java.util.stream.Collectors;
 
 public class SortableTablePage extends GeneralPage {
     private final By rowsXpath = By.xpath("//table[@id='table1']/tbody/tr");
-    private By headerXpath (String header){
-        String xpath = String.format("//table[@id='table1']/thead/tr/th/span[text()='%s']", header);
-        return By.xpath(xpath);
-    }
-    private By colsDataXpath (int index){
-        String xpath = String.format("//table[@id='table1']/tbody/tr/td[%s]",index);
-        return By.xpath(xpath);
-    }
+    private By headerXpath(String header) { return By.xpath(String.format("//table[@id='table1']/thead/tr/th/span[text()='%s']", header)); }
+    private By colsDataXpath(int index) { return By.xpath(String.format("//table[@id='table1']/tbody/tr/td[%s]", index)); }
 
 
     public List<TableData> getAllDataOfTable1(){
@@ -49,10 +43,7 @@ public class SortableTablePage extends GeneralPage {
 
     public boolean isColumnSorted(SortableDataTableHeader header){
         clickHeader(header);
-        boolean sortedAsc = isSortedAsc(header);
-        clickHeader(header);
-        boolean sortedDesc = isSortedDesc(header);
-        return sortedAsc && sortedDesc;
+        return isSortedAsc(header) || isSortedDesc(header);
     }
 
     public List<String> getColumnValues(SortableDataTableHeader header){
@@ -66,36 +57,42 @@ public class SortableTablePage extends GeneralPage {
     }
     public boolean isSortedAsc(SortableDataTableHeader header) {
         List<String> originalValues = getColumnValues(header);
+        List<String> sortedValues;
+        List<Double> originalDoubles ;
+        List<Double> sortedDoubles;
 
         if (header == SortableDataTableHeader.DUE) {
-            List<Double> original = originalValues.stream()
+            originalDoubles = originalValues.stream()
                     .map(val -> Double.parseDouble(val.replace("$", "")))
                     .collect(Collectors.toList());
 
-            List<Double> sorted = new ArrayList<>(original);
-            Collections.sort(sorted);
-            return original.equals(sorted);
+            sortedDoubles = new ArrayList<>(originalDoubles);
+            Collections.sort(sortedDoubles);
+            return originalDoubles.equals(sortedDoubles);
         } else {
-            List<String> sorted = new ArrayList<>(originalValues);
-            Collections.sort(sorted);
-            return originalValues.equals(sorted);
+            sortedValues = new ArrayList<>(originalValues);
+            Collections.sort(sortedValues);
+            return originalValues.equals(sortedValues);
         }
     }
     public boolean isSortedDesc(SortableDataTableHeader header) {
         List<String> originalValues = getColumnValues(header);
+        List<String> sortedValues;
+        List<Double> originalDoubles;
+        List<Double> sortedDoubles;
 
         if (header == SortableDataTableHeader.DUE) {
-            List<Double> original = originalValues.stream()
+            originalDoubles = originalValues.stream()
                     .map(val -> Double.parseDouble(val.replace("$", "")))
                     .collect(Collectors.toList());
 
-            List<Double> sorted = new ArrayList<>(original);
-            sorted.sort(Collections.reverseOrder());
-            return original.equals(sorted);
+            sortedDoubles = new ArrayList<>(originalDoubles);
+            sortedDoubles.sort(Collections.reverseOrder());
+            return originalDoubles.equals(sortedDoubles);
         } else {
-            List<String> sorted = new ArrayList<>(originalValues);
-            sorted.sort(Collections.reverseOrder());
-            return originalValues.equals(sorted);
+            sortedValues = new ArrayList<>(originalValues);
+            sortedValues.sort(Collections.reverseOrder());
+            return originalValues.equals(sortedValues);
         }
     }
 }

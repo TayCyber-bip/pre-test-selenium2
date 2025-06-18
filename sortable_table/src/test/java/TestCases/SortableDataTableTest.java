@@ -1,6 +1,7 @@
 package TestCases;
 
 import Commnon.Constant;
+import Commnon.PropertyReader;
 import Commnon.util.ExtentManager;
 import DataObjects.TableData;
 import DataTypes.PageName;
@@ -17,6 +18,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import java.util.List;
+import java.util.Properties;
 
 public class SortableDataTableTest {
     //ExtentTest extentTest;
@@ -26,6 +28,7 @@ public class SortableDataTableTest {
     HomePage homePage;
     SoftAssert softAssert;
     ExtentTest extentTest;
+    Properties props;
     @BeforeMethod
     public void beforeMethod(){
         System.out.println("Pre-condition");
@@ -33,12 +36,13 @@ public class SortableDataTableTest {
         Constant.webDriver = new ChromeDriver();
         Constant.webDriver.manage().window().maximize();
         actualFirstRow = new TableData();
+        props= PropertyReader.loadProperties("Data/expectedRow.properties");
         expectedFirstRow = new TableData(
-                "Smith",
-                "John",
-                "jsmith@gmail.com",
-                "$50.00",
-                "http://www.jsmith.com"
+                props.getProperty("lastName"),
+                props.getProperty("firstName"),
+                props.getProperty("email"),
+                props.getProperty("amount"),
+                props.getProperty("website")
         );
         sortableTablePage = new SortableTablePage();
         softAssert = new SoftAssert();
